@@ -2,14 +2,12 @@
   <div class="task-list">
     <h1>Lista de Tareas</h1>
 
- 
-    <!-- Formulario para crear nuevas tareas -->
     <form @submit.prevent="createTask">
       <div class="form-group">
         <label for="task">Nueva tarea:</label>
         <input 
           type="text" 
-          v-model="newTask" 
+          v-model="newTaskText" 
           class="form-control" 
           placeholder="Escribe una tarea" 
         />
@@ -17,65 +15,50 @@
       <button type="submit" class="btn btn-primary mt-2">Agregar tarea</button>
     </form>
 
- 
-
-    <!-- Lista de tareas -->
     <ul class="list-group mt-3">
       <li 
-        class="list-group-item d-flex justify-content-between align-items-center" 
         v-for="(task, index) in tasks" 
-        :key="index"
+        :key="task.id" 
+        class="list-group-item d-flex justify-content-between align-items-center"
       >
-        <div>
-          <input 
-            type="checkbox" 
-            class="me-2" 
-            v-model="task.completed" 
-            @change="toggleComplete(task)" 
-          />
-          <span :class="{ completed: task.completed }">{{ task.text }}</span>
-        </div>
+        <TodoItem 
+          :title="task.text" 
+          :completed="task.completed" 
+          @toggle-completion="toggleComplete(task)" 
+          @delTodo="deleteTask(task.id)" 
+        />
       </li>
     </ul>
   </div>
 </template>
 
- 
-
 <script>
+import TodoItem from "@/components/TodoItem.vue";
+
 export default {
+  name: "TodoList",
+  components: { TodoItem },
+  props: {
+    tasks: Array
+  },
   data() {
     return {
-      newTask: '',  // Variable para la nueva tarea
-      tasks: []     // Array de tareas
+      newTaskText: ''
     };
   },
   methods: {
     createTask() {
-      if (this.newTask.trim()) {
-        this.tasks.push({
-          text: this.newTask,
-          completed: false
-        });
-        this.newTask = ''; // Limpiar input después de añadir
-      }
+      const newTask = { text: this.newTaskText, completed: false };
+      this.$emit("add-task", newTask);
+      this.newTaskText = "";
     },
     toggleComplete(task) {
-      task.completed = !task.completed; // Cambiar estado de completada o no
+      const updatedTask = { ...task, completed: !task.completed };
+      this.$emit("update-task", updatedTask);
+    },
+    deleteTask(id) {
+      this.$emit("delete-task", id);
     }
   }
 };
 </script>
-
- 
-
-<style scoped>
-.task-list {
-  max-width: 600px;
-  margin: 0 auto;
-}
-.completed {
-  text-decoration: line-through;
-  color: gray;
-}
-</style>
