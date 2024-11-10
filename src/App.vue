@@ -72,3 +72,55 @@ export default {
   }
 };
 </script>
+<style>
+/* Estilos globales */
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  color: #2c3e50;
+  margin-top: 20px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #35495e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0;
+  color: #fff;
+}
+
+nav {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #42b983;
+}
+
+/* Animación de transición para el cambio de vistas */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
