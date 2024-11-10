@@ -1,26 +1,32 @@
 <template>
-    <div class="add-task">
-      <h3>Agregar Tarea</h3>
-      <form @submit.prevent>
-        <!-- Campo para el título de la tarea -->
-        <input
-          v-model="task.title"
-          @input="guardarTarea"
-          type="text"
-          placeholder="Título de la tarea"
-          required
-        />
-  
-        <!-- Campo para la descripción de la tarea -->
-        <textarea
-          v-model="task.description"
-          @input="guardarTarea"
-          placeholder="Descripción de la tarea"
-        ></textarea>
-      </form>
-    </div>
-  </template>
-  
+  <div>
+    <h2>Agregar Nueva Tarea</h2>
+    <form @submit.prevent="submitTask">
+      <input v-model="newTask" placeholder="Escribe una nueva tarea" />
+      <button type="submit">Agregar Tarea</button>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "AddTask",
+  data() {
+    return {
+      newTask: ""
+    };
+  },
+  methods: {
+    submitTask() {
+      if (this.newTask.trim()) {
+        this.$emit("add-task", { text: this.newTask, completed: false });
+        this.newTask = "";
+      }
+    }
+  }
+};
+</script>
+
   <script>
   import axios from 'axios';
   
