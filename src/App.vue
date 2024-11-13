@@ -2,12 +2,12 @@
   <div id="app">
     <header>
       <h1>Gestor de Tareas</h1>
-      <nav>
-        <router-link to="/HomeView">Inicio</router-link>
-        <router-link to="/TaskList">Lista de Tareas</router-link>
-        <router-link to="/AddTask">Agregar Tarea</router-link>
-        <router-link to="/CombinedView">Vista Combinada</router-link>
-        <router-link to="/AboutView">Acerca de</router-link>
+      <nav class="navbar">
+        <router-link to="/HomeView">Inicio</router-link> |
+        <router-link to="/TaskList">Lista de Tareas</router-link> |
+        <router-link to="/AddTask">Agregar Tarea</router-link> |
+        <router-link to="/CombinedView">Vista Combinada</router-link> |
+        <router-link to="/AboutView">Acerca de</router-link> |
       </nav>
     </header>
 
@@ -72,55 +72,125 @@ export default {
   }
 };
 </script>
+
 <style>
-/* Estilos globales */
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
-  margin-top: 20px;
-}
-
+/* Encabezado */
 header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-  background-color: #35495e;
-  color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  background-color: #6200ea;
+  color: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h1 {
-  font-size: 2em;
+header h1 {
+  font-size: 2rem;
   margin: 0;
   color: #fff;
 }
 
 nav {
-  display: flex;
-  gap: 15px;
   margin-top: 10px;
 }
 
-.nav-link {
-  color: #fff;
+nav a {
+  color: #bb86fc;
   text-decoration: none;
+  margin: 0 10px;
   font-weight: bold;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: #3700b3;
+  color: #ffffff;
+}
+
+/* Contenedor principal */
+#app {
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Lista de tareas */
+.task-list, .add-task-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-list h1, .add-task-form h2 {
+  font-size: 1.8rem;
+  color: #6200ea;
+  margin-bottom: 1rem;
+}
+
+/* Botones */
+button {
+  background-color: #6200ea;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
-.nav-link:hover {
-  background-color: #42b983;
+button:hover {
+  background-color: #3700b3;
 }
 
-/* Animación de transición para el cambio de vistas */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+/* Input */
+input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
-.fade-enter, .fade-leave-to {
+
+/* Lista de tareas y animaciones */
+.list-group {
+  list-style: none;
+  padding: 0;
+}
+
+.list-group-item {
+  background-color: #e8eaf6;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #d1c4e9;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #757575;
+}
+
+/* Transiciones para lista */
+.list-group-item-enter-active, .list-group-item-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-group-item-enter, .list-group-item-leave-to {
   opacity: 0;
+  transform: translateY(10px);
 }
 </style>
