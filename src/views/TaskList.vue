@@ -1,119 +1,128 @@
 <template>
-    <div class="task-list">
-      <h2>Lista de Tareas</h2>
-      
-      <!-- Mensaje si no hay tareas -->
-      <p v-if="tasks.length === 0">No hay tareas disponibles</p>
-      
-      <!-- Renderiza la lista de tareas -->
-      <ul>
-        <li v-for="task in tasks" :key="task.id" :class="{ completed: task.completed }">
-          <span>{{ task.title }}</span>
-          
-          <!-- Botón para marcar como completada o pendiente -->
-          <button @click="toggleCompletion(task)">
-            {{ task.completed ? "Marcar como Pendiente" : "Marcar como Completada" }}
-          </button>
-          
-          <!-- Botón para eliminar la tarea -->
-          <button @click="deleteTask(task.id)">Eliminar</button>
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script>
-  import TaskService from "@/todoService"; // Asegúrate de ajustar la ruta según la estructura de tu proyecto
-  
-  export default {
-    name: "TaskList",
-    data() {
+  <div>
+      <h1>Lista de Tareas</h1>
+      <button @click="fetchTasks">Cargar Tareas</button>
+      <div v-if="tasks.length > 0">
+          <div v-for="task in tasks" :key="task.id">
+              <div>
+                  <h5 :style="{ textDecoration: task.completed ? 'line-through' : 'none' }">{{ task.todo }}</h5>
+                  <span>{{ task.completed ? 'Completada' : 'Pendiente' }}</span>
+                  <button @click="toggleTaskCompletion(task)">
+                      {{ task.completed ? 'Desmarcar' : 'Completar' }}
+                  </button>
+                  <button @click="deleteTask(task)">Eliminar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+export default {
+  name: "TaskList",
+  data() {
       return {
-        tasks: [] // Array para almacenar la lista de tareas
+          tasks: [], // Almacenamiento local de las tareas traídas de la API
       };
-    },
-    async mounted() {
-      await this.fetchTasks(); // Llama al método para obtener tareas cuando el componente se monta
-    },
-    methods: {
-      // Método para obtener la lista de tareas desde la API
-      async fetchTasks() {
-        try {
-          const response = await TaskService.getTodos();
-          this.tasks = response; // Asigna la lista de tareas al array tasks
-        } catch (error) {
-          console.error("Error al obtener tareas:", error);
-        }
+  },
+  methods: {
+      // Llamada para obtener las tareas desde la API externa
+      fetchTasks() {
+        axios
+        .get("https://dummyjson.com/todos")
+        .then((response)=>{
+          this.tasks=response.data.todos;
+        })
+        .catch((error)=>{
+          console.log (error);
+        });
+          // Aquí deberían realizar la solicitud a la API usando axios o fetch.
+          // La URL que usaremos es: https://dummyjson.com/todos
+
+          // Sugerencia: Intentar implementarlo con axios o fetch
       },
-  
-      // Método para alternar el estado de completado de una tarea
-      async toggleCompletion(task) {
-        task.completed = !task.completed; // Alterna el estado
-        try {
-          await TaskService.updateTodo(task.id, task); // Actualiza la tarea en el servidor
-        } catch (error) {
-          console.error("Error al actualizar la tarea:", error);
-        }
+
+      // Cambiar el estado de una tarea (completada/no completada)
+      toggleTaskCompletion(task) {
+          task.completed = !task.completed;
       },
-  
-      // Método para eliminar una tarea
-      async deleteTask(id) {
-        try {
-          await TaskService.deleteTodo(id);
-          this.tasks = this.tasks.filter(task => task.id !== id); // Elimina la tarea de la lista local
-        } catch (error) {
-          console.error("Error al eliminar la tarea:", error);
-        }
-      }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .task-list {
-    padding: 20px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 5px;
-  }
-  
-  li.completed span {
-    text-decoration: line-through;
-    color: #777;
-  }
-  
-  button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    opacity: 0.9;
-  }
-  
-  button:nth-child(2) {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  button:nth-child(3) {
-    background-color: #f44336;
-    color: white;
-  }
-  </style>
-  
+
+      // Eliminar la tarea seleccionada
+      deleteTask(task) {
+          this.tasks = this.tasks.filter((t) => t.id !== task.id);
+      },
+  },
+};
+</script>
+
+<style scoped>
+.task-list {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #6200ea;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Lista de tareas */
+.list-group {
+  list-style: none;
+  padding: 0;
+}
+
+.list-group-item {
+  background-color: #e8eaf6;
+  padding: 1rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #d1c4e9;
+  transform: translateY(-2px);
+}
+
+.task-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #757575;
+}
+
+/* Botón eliminar */
+.btn-delete-task {
+  background-color: #f44336;
+  color: #ffffff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete-task:hover {
+  background-color: #e53935;
+}
+
+/* Estilo para el checkbox */
+.checkbox {
+  accent-color: #6200ea;
+}
+</style>
